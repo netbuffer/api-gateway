@@ -1,0 +1,34 @@
+spring:
+  profiles:
+    active: dev
+#logging:
+#  config: classpath:logback-springboot.xml
+endpoints:
+  shutdown:
+    enabled: true
+
+# 环境变量
+---
+spring:
+  profiles: dev
+  application:
+    name: api-gategory
+server:
+  context-path: /dev
+  port: 8081
+---
+spring:
+  profiles: test
+  application:
+      name: api-gategory
+server:
+  context-path: /test
+  port: 8082
+---
+spring:
+  profiles: product
+  application:
+      name: api-gategory
+server:
+  context-path: /product
+  port: 80
