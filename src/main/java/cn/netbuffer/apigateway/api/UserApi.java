@@ -1,11 +1,11 @@
 package cn.netbuffer.apigateway.api;
 
 import cn.netbuffer.apigateway.model.User;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 @Api(name = "cn.netbuffer.apigateway.api.userApi")
-@Service("cn.netbuffer.apigateway.api.userApi")
-public class UserService {
+@Component("cn.netbuffer.apigateway.api.userApi")
+public class UserApi {
 
     public User getUser(Long id) {
         return new User(id);

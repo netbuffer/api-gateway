@@ -1,6 +1,7 @@
 package cn.netbuffer.apigateway;
 
 import cn.netbuffer.apigateway.exception.ApiException;
+import cn.netbuffer.apigateway.handler.IApiExceptionHandler;
 import cn.netbuffer.apigateway.listener.AppLoadedListener;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -41,7 +42,7 @@ public class ApiBootstrap {
         try {
             return invoke(method, param);
         } catch (ApiException e) {
-            return e.getMessage();
+            return applicationContext.getBean(IApiExceptionHandler.class).handle(e);
         }
 //        return "api-gategory";
     }
