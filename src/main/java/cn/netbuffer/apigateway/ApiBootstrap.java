@@ -12,15 +12,14 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
 import org.springframework.core.ParameterNameDiscoverer;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/")
@@ -32,7 +31,7 @@ public class ApiBootstrap {
     private ApplicationContext applicationContext;
     private ParameterNameDiscoverer parameterNameDiscoverer = new LocalVariableTableParameterNameDiscoverer();
 
-    @RequestMapping
+    @RequestMapping(method = RequestMethod.GET)
     public Object api(@RequestParam(value = "method", required = false) String method,
                       @RequestParam(value = "param", required = false) String param) {
         LOGGER.info("invoke api method:{},param:{}", method, param);
@@ -47,7 +46,15 @@ public class ApiBootstrap {
 //        return "api-gategory";
     }
 
-    private boolean check(String method, String param) {
+    @RequestMapping(method = {RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
+    public Object api(@RequestBody Map data) {
+        if (!check(data.get("method"), data.get("param"))) {
+            return "invalid args";
+        }
+        return api(data.get("method").toString(), JSON.toJSONString(data.get("param")));
+    }
+
+    private boolean check(Object method, Object param) {
         if (StringUtils.isEmpty(method) || StringUtils.isEmpty(param)) {
             return false;
         }
