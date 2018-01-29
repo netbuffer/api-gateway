@@ -1,0 +1,2 @@
+[https://httpie.org/doc#installation](https://httpie.org/doc#installation)
+> 使用httpie测试:`http post localhost:8081/dev body="{   "method": "cn.netbuffer.apigateway.api.userApi.saveUser",   "param": {     "user": {       "id": 1,       "name": "tt"     }   } }"`

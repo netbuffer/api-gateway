@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/")
+@RequestMapping(path = "/")
 public class ApiBootstrap {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ApiBootstrap.class);
