@@ -31,7 +31,7 @@ public class ApiBootstrap {
     private ApplicationContext applicationContext;
     private ParameterNameDiscoverer parameterNameDiscoverer = new LocalVariableTableParameterNameDiscoverer();
 
-    @RequestMapping(method = RequestMethod.GET)
+    @GetMapping
     public Object api(@RequestParam(value = "method", required = false) String method,
                       @RequestParam(value = "param", required = false) String param) {
         LOGGER.info("invoke api method:{},param:{}", method, param);

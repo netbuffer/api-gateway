@@ -1,12 +1,12 @@
 spring:
   profiles:
     active: dev
-#logging:
-#  config: classpath:logback-springboot.xml
+  output:
+    ansi:
+      enabled: always
 endpoints:
   shutdown:
     enabled: true
-
 # 环境变量
 ---
 spring:
@@ -16,6 +16,10 @@ spring:
 server:
   context-path: /dev
   port: 8081
+#  打印调试信息
+debug: true
+logging:
+  config: classpath:logback-springboot.xml
 ---
 spring:
   profiles: test
