@@ -18,6 +18,7 @@ public class AppLoadedListener implements ApplicationListener<ContextRefreshedEv
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AppLoadedListener.class);
     public static Map<String, Method> API = new HashMap<>();
+    public static Map<String, Map<String, Object>> API_DECLARATION = new HashMap<>();
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent contextStartedEvent) {
@@ -36,12 +37,17 @@ public class AppLoadedListener implements ApplicationListener<ContextRefreshedEv
             for (Method m : methods) {
                 Api am = m.getAnnotation(Api.class);
                 String name = null;
-                if (am == null||StringUtils.isEmpty(am.name())) {
+                if (am == null || StringUtils.isEmpty(am.name())) {
                     name = m.getName();
                 } else {
                     name = am.name();
                 }
-                API.put(a.name() + "." + name, m);
+                String apiName = a.name() + "." + name;
+                API.put(apiName, m);
+                Map method = new HashMap();
+                method.put("method", m.getName());
+                method.put("params", m.getParameterTypes());
+                API_DECLARATION.put(apiName, method);
             }
         }
         return API.size();

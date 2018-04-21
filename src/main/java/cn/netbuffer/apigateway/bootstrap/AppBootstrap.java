@@ -31,6 +31,11 @@ public class AppBootstrap {
     private ApplicationContext applicationContext;
     private ParameterNameDiscoverer parameterNameDiscoverer = new LocalVariableTableParameterNameDiscoverer();
 
+    @GetMapping("api")
+    public Map apis() {
+        return AppLoadedListener.API_DECLARATION;
+    }
+
     @GetMapping
     public Object api(@RequestParam(value = "method", required = false) String method,
                       @RequestParam(value = "param", required = false) String param) {
@@ -43,7 +48,6 @@ public class AppBootstrap {
         } catch (ApiException e) {
             return applicationContext.getBean(IApiExceptionHandler.class).handle(e);
         }
-//        return "api-gategory";
     }
 
     @RequestMapping(method = {RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
