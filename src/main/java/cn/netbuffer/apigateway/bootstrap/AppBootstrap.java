@@ -1,4 +1,4 @@
-package cn.netbuffer.apigateway;
+package cn.netbuffer.apigateway.bootstrap;
 
 import cn.netbuffer.apigateway.exception.ApiException;
 import cn.netbuffer.apigateway.handler.IApiExceptionHandler;
@@ -23,9 +23,9 @@ import java.util.Map;
 
 @RestController
 @RequestMapping(path = "/")
-public class ApiBootstrap {
+public class AppBootstrap {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ApiBootstrap.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AppBootstrap.class);
 
     @Resource
     private ApplicationContext applicationContext;

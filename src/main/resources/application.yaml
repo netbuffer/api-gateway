@@ -1,6 +1,8 @@
 spring:
   profiles:
     active: dev
+  application:
+    name: @project.name@
   output:
     ansi:
       enabled: always
@@ -11,8 +13,6 @@ endpoints:
 ---
 spring:
   profiles: dev
-  application:
-    name: api-gategory
 server:
   context-path: /dev
   port: 8081
@@ -23,16 +23,12 @@ logging:
 ---
 spring:
   profiles: test
-  application:
-      name: api-gategory
 server:
   context-path: /test
   port: 8082
 ---
 spring:
   profiles: product
-  application:
-      name: api-gategory
 server:
   context-path: /product
   port: 80
