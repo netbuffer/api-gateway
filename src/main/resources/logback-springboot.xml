@@ -19,7 +19,7 @@
     <logger name="jdbc.audit" level="OFF"/>
     <logger name="jdbc.sqlonly" level="OFF"/>
     <logger name="jdbc.resultset" level="OFF"/>
-    <logger name="org.springframework.web" level="DEBUG"/>
+    <logger name="org.springframework" level="INFO"/>
     <logger name="cn.netbuffer" level="DEBUG"/>
 
     <root level="WARN">

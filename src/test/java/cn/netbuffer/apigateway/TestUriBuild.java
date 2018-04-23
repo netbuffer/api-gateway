@@ -12,6 +12,6 @@ public class TestUriBuild {
                 .scheme("http").host("example.com").path("/hotels/{hotel}/bookings/{booking}").build()
                 .expand("42", "21")
                 .encode();
-        System.out.println(uriComponents.toUriString());
+        System.out.println(uriComponents);
     }
 }

@@ -9,17 +9,44 @@ spring:
 endpoints:
   shutdown:
     enabled: true
+logging:
+  config: classpath:logback-springboot.xml
 # 环境变量
 ---
 spring:
   profiles: dev
+  datasource:
+    druid:
+      url: jdbc:mysql://127.0.0.1:3306/u?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC
+      username: root
+      password: root
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      initial-size: 1
+      min-idle: 1
+      max-active: 5
+      max-wait: 120000
+      validation-query: select 1
+      min-evictable-idle-time-millis: 60000
+      max-evictable-idle-time-millis: 600000
+      test-while-idle: true
+      test-on-borrow: true
+      filters : stat,slf4j,wall
+      filter:
+        slf4j:
+          enabled: true
+          statement-close-after-log-enabled: false
+          result-set-open-after-log-enabled: false
+          result-set-close-after-log-enabled : false
+  jpa:
+    properties:
+      hibernate:
+        show_sql: false
+        format_sql: false
 server:
   context-path: /dev
   port: 8081
 #  打印调试信息
-debug: true
-logging:
-  config: classpath:logback-springboot.xml
+#debug: false
 ---
 spring:
   profiles: test

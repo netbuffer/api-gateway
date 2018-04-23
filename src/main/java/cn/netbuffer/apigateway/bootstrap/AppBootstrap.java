@@ -40,7 +40,7 @@ public class AppBootstrap {
     public Object api(@RequestParam(value = "method", required = false) String method,
                       @RequestParam(value = "param", required = false) String param) {
         LOGGER.info("invoke api method:{},param:{}", method, param);
-        if (!check(method, param)) {
+        if (!checkMethodIsNull(method)) {
             return "invalid args";
         }
         try {
@@ -52,14 +52,21 @@ public class AppBootstrap {
 
     @RequestMapping(method = {RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
     public Object api(@RequestBody Map data) {
-        if (!check(data.get("method"), data.get("param"))) {
+        if (!checkMethodAndParamIsNull(data.get("method"), data.get("param"))) {
             return "invalid args";
         }
         return api(data.get("method").toString(), JSON.toJSONString(data.get("param")));
     }
 
-    private boolean check(Object method, Object param) {
+    private boolean checkMethodAndParamIsNull(Object method, Object param) {
         if (StringUtils.isEmpty(method) || StringUtils.isEmpty(param)) {
+            return false;
+        }
+        return true;
+    }
+
+    private boolean checkMethodIsNull(Object method) {
+        if (StringUtils.isEmpty(method)) {
             return false;
         }
         return true;

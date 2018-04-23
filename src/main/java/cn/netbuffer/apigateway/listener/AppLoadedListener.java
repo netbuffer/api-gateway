@@ -1,18 +1,23 @@
 package cn.netbuffer.apigateway.listener;
 
 import cn.netbuffer.apigateway.api.Api;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.aop.framework.AdvisedSupport;
+import org.springframework.aop.support.AopUtils;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 @Component
 public class AppLoadedListener implements ApplicationListener<ContextRefreshedEvent> {
 
@@ -28,11 +33,39 @@ public class AppLoadedListener implements ApplicationListener<ContextRefreshedEv
         }
     }
 
+    public static Object getTarget(Object beanInstance) {
+        if (!AopUtils.isAopProxy(beanInstance)) {
+            return beanInstance;
+        } else if (AopUtils.isCglibProxy(beanInstance)) {
+            try {
+                Field h = beanInstance.getClass().getDeclaredField("CGLIB$CALLBACK_0");
+                h.setAccessible(true);
+                Object dynamicAdvisedInterceptor = h.get(beanInstance);
+                Field advised = dynamicAdvisedInterceptor.getClass().getDeclaredField("advised");
+                advised.setAccessible(true);
+                Object target = ((AdvisedSupport) advised.get(dynamicAdvisedInterceptor)).getTargetSource().getTarget();
+                return target;
+            } catch (NoSuchFieldException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
     private Integer initApi(ApplicationContext applicationContext) {
         Map<String, Object> apiBeans = applicationContext.getBeansWithAnnotation(Api.class);
         for (Map.Entry api : apiBeans.entrySet()) {
-            Class apiClass = api.getValue().getClass();
+            Object value = api.getValue();
+            log.debug("{} isAopProxy:{}", value, AopUtils.isAopProxy(value));
+            Class apiClass = getTarget(value).getClass();
             Api a = (Api) apiClass.getAnnotation(Api.class);
+            if (a == null) {
+                continue;
+            }
             Method[] methods = apiClass.getDeclaredMethods();
             for (Method m : methods) {
                 Api am = m.getAnnotation(Api.class);

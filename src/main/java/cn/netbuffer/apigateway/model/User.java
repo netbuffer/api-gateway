@@ -1,7 +1,10 @@
 package cn.netbuffer.apigateway.model;
 
+import javax.persistence.*;
 import java.io.Serializable;
 
+@Entity
+@Table(name = "user")
 public class User implements Serializable {
 
     private Long id;
@@ -11,7 +14,6 @@ public class User implements Serializable {
     private String phone;
     private String deliveryaddress;
     private Integer adddate;
-    private transient String comments;
 
     public User() {
     }
@@ -20,6 +22,8 @@ public class User implements Serializable {
         this.id=id;
     }
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long getId() {
         return id;
     }
@@ -74,13 +78,5 @@ public class User implements Serializable {
 
     public void setAdddate(Integer adddate) {
         this.adddate = adddate;
-    }
-
-    public String getComments() {
-        return comments;
-    }
-
-    public void setComments(String comments) {
-        this.comments = comments;
     }
 }
