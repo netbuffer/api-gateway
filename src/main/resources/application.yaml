@@ -20,7 +20,7 @@ spring:
       url: jdbc:mysql://127.0.0.1:3306/u?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC
       username: root
       password: root
-      driver-class-name: com.mysql.cj.jdbc.Driver
+      driver-class-name: com.mysql.jdbc.Driver
       initial-size: 1
       min-idle: 1
       max-active: 5
