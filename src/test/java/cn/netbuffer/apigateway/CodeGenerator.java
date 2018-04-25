@@ -10,6 +10,8 @@ import org.thymeleaf.templateresolver.StringTemplateResolver;
 
 import java.io.StringWriter;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 public class CodeGenerator {
@@ -30,11 +32,38 @@ public class CodeGenerator {
     public void testGetDatabaseMetaData() throws SQLException {
         DatabaseMetaData databaseMetaData = connection.getMetaData();
         ResultSet catalogs = databaseMetaData.getCatalogs();
-        StringBuilder databases = new StringBuilder();
+        List databases = new ArrayList();
         while (catalogs.next()) {
-            databases.append(catalogs.getString(1)).append(" | ");
+            databases.add(catalogs.getString(1));
         }
         log.info("databases:{}", databases);
+        ResultSet rs = databaseMetaData.getTables(null, null, null, null);
+        List tables = new ArrayList();
+        while (rs.next()) {
+            tables.add(rs.getString("TABLE_NAME"));
+        }
+        log.info("tables:{}", tables);
+    }
+
+    @Test
+    public void testGetTableColumns() {
+        getTable("user", connection);
+    }
+
+    private void getTable(String tableName, Connection connection) {
+        String sql = "select * from " + tableName + " limit 1";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            ResultSetMetaData meta = rs.getMetaData();
+            int columeCount = meta.getColumnCount();
+            log.info("表 " + tableName + "共有 " + columeCount + " 个字段");
+            for (int i = 1, len = columeCount + 1; i < len; i++) {
+                log.info("column:{}-{}", meta.getColumnName(i), meta.getColumnTypeName(i));
+            }
+        } catch (SQLException e) {
+            log.error("{}", e.getMessage());
+        }
     }
 
     /**

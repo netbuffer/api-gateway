@@ -5,8 +5,9 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "user")
-public class User implements Serializable {
+public class User implements Serializable{
 
+    private static final long serialVersionUID = 5288757389917680062L;
     private Long id;
     private String name;
     private String sex;
