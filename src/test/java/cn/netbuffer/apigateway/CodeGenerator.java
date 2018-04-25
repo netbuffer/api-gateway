@@ -1,5 +1,6 @@
 package cn.netbuffer.apigateway;
 
+import cn.netbuffer.apigateway.model.User;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
@@ -36,16 +37,27 @@ public class CodeGenerator {
         log.info("databases:{}", databases);
     }
 
+    /**
+     * https://www.thymeleaf.org/doc/tutorials/3.0/usingthymeleaf.html#textual-template-modes
+     */
     @Test
-    public void testCreate() {
+    public void testThymeleaf() {
         TemplateEngine templateEngine = new TemplateEngine();
         StringTemplateResolver stringTemplateResolver = new StringTemplateResolver();
         stringTemplateResolver.setTemplateMode("TEXT");
         templateEngine.setTemplateResolver(stringTemplateResolver);
         Context context = new Context();
         context.setVariable("name", "World");
+        context.setVariable("user", new User(1L, "admin"));
+        context.setVariable("items", new String[]{"a", "b", "c"});
         StringWriter stringWriter = new StringWriter();
-        templateEngine.process("hello  <h3 th:text=\"${name}\">this is a greeting</h3>", context, stringWriter);
-        log.info("text:{}", stringWriter.toString());
+        templateEngine.process("hello:[(${name})]" +
+                "[# th:if=\"${user.name}\"]\n" +
+                "   alert('Welcome [(${user.name})]');\n" +
+                "  [/]" +
+                "[# th:each=\"item : ${items}\"]\n" +
+                "   [(${item})]\n" +
+                "[/]", context, stringWriter);
+        log.info("{}", stringWriter);
     }
 }
